@@ -1,0 +1,12 @@
+$black: #87213c;
+$white: #fff;
+
+$primary-color: #f9dde3;
+$secondary-color: #ff2961;
+
+:root {
+	--black: #{$black};
+	--white: #{$white};
+	--primary-color: #{$primary-color};
+	--secondary-color: #{$secondary-color};
+}
