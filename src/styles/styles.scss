@@ -1,8 +1,21 @@
 @import 'reset';
-@import 'variables';
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
+* { box-sizing: border-box; }
 
 body {
 	display: grid;
 	place-items: center;
 	min-height: 100vh;
+	background-color: var(--primary-color-tint);
+	font-family: $primary-font;
+}
+
+.container {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+	align-items: center;
+	width: 100%;
+	max-width: 400px;
 }

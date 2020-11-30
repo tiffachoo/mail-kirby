@@ -2,11 +2,15 @@ $black: #87213c;
 $white: #fff;
 
 $primary-color: #f9dde3;
+$primary-color-tint: #fcf2f5;
 $secondary-color: #ff2961;
+
+$primary-font: 'Fredoka One', sans-serif;
 
 :root {
 	--black: #{$black};
 	--white: #{$white};
 	--primary-color: #{$primary-color};
+	--primary-color-tint: #{$primary-color-tint};
 	--secondary-color: #{$secondary-color};
 }
