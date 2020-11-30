@@ -1,6 +1,7 @@
 <template>
 	<div class="dreamy-input">
 		<input 
+			:disabled="disabled"
 			:value="modelValue"
 			class="dreamy-input-control"
 			type="text"
@@ -13,6 +14,7 @@
 export default {
 	name: 'dreamy-input',
 	props: {
+		disabled: Boolean,
 		modelValue: String
 	}
 }
@@ -40,7 +42,7 @@ export default {
 	}
 
 	&-control {
-		width: 100%;
+		width: 12.5rem;
 		height: 3.125rem;
 		padding: 0 1rem;
 		border: 0;

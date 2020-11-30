@@ -116,8 +116,8 @@ export default {
 <style lang="scss">
 .kirby {
 	display: inline-block;
-	height: 200px;
-	width: 200px;
+	height: 12.5rem;
+	width: 12.5rem;
 
 	&-stroke {
 		stroke: var(--black);
