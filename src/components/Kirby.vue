@@ -21,7 +21,10 @@
 					ry="26"
 				/>
 			</g>
-			<g id="legRight">
+			<g 
+				id="legRight"
+				ref="legRight"
+			>
 				<ellipse 
 					class="kirby-foot" 
 					cx="138" 
@@ -37,7 +40,10 @@
 					ry="26"
 				/>
 			</g>
-			<g id="armLeft">
+			<g 
+				id="armLeft"
+				ref="armLeft"
+			>
 				<circle 
 					id="armLeft-2" 
 					class="kirby-body" 
@@ -52,7 +58,10 @@
 					r="20.5"
 				/>
 			</g>
-			<g id="body">
+			<g 
+				id="body"
+				ref="body"
+			>
 				<circle 
 					class="kirby-body" 
 					cx="101.5" 
@@ -66,7 +75,10 @@
 					r="57.5"
 				/>
 			</g>
-			<g id="armRight">
+			<g 
+				id="armRight"
+				ref="armRight"
+			>
 				<path 
 					class="kirby-body" 
 					d="M141,58.73A20.5,20.5,0,1,1,154.68,94.5"
@@ -76,7 +88,10 @@
 					d="M136,58.73A20.5,20.5,0,1,1,149.68,94.5"
 				/>
 			</g>
-			<g id="face">
+			<g 
+				id="face"
+				ref="face"
+			>
 				<path 
 					id="eyeRight"
 					class="kirby-eye" 
@@ -100,16 +115,94 @@
 			</g>
 			<path 
 				id="mouth" 
+				ref="mouth"
 				class="kirby-stroke" 
 				d="M77,98c0,1.93-2.12,3.5-4.5,3.5S68,99.93,68,98"
 			/>
+			<g 
+				id="mouthOpen"
+				ref="mouthOpen"
+				class="kirby-mouth-open"
+			>
+				<path class="kirby-stroke kirby-mouth-open-inner" d="M94,105.69c0,14.36-11,23.31-22,23.31s-18-9-18-23.31S61,77,72,77,94,91.33,94,105.69Z"/>
+				<path class="kirby-stroke kirby-mouth-open-tongue" d="M72,129a22,22,0,0,0,18.91-11.18C90,109.51,82.8,101.07,74,101.07c-9.39,0-17,9.6-17,18.41,0,.11,0,.21,0,.32A16.16,16.16,0,0,0,72,129Z"/>
+			</g>
 		</svg>
 	</div>
 </template>
 
 <script>
+import { gsap } from "gsap";
 export default {
-	name: 'kirby'
+	name: 'kirby',
+	props: {
+		swallow: Boolean,
+		inhale: Boolean
+	},
+	watch: {
+		swallow() {
+			if (this.swallow) {
+				this.animateInhale();
+
+				// temp un-disable 
+				setTimeout(() => {
+					this.$emit('animationdone');
+				}, 5000)
+			}
+		}
+	},
+	methods: {
+		animateInhale() {
+			const delay = 0.1;
+			const tl = gsap.timeline();
+			tl
+				.to(this.$refs.mouth, {
+					duration: delay,
+					scale: 0.5
+				})
+				.to(this.$refs.mouthOpen, {
+					duration: 0.5,
+					scale: 1,
+					x: 0,
+					y: 0
+				});
+
+			gsap.to(this.$refs.face, {
+				delay,
+				duration: 0.5,
+				rotation: 5,
+				transformOrigin: '25px bottom',
+				y: -20
+			});
+
+			gsap.to(this.$refs.armLeft, {
+				delay,
+				duration: 0.7,
+				rotation: 80,
+				transformOrigin: '70px 42px'
+			});
+
+			gsap.to(this.$refs.armRight, {
+				delay,
+				duration: 0.7,
+				rotation: -15,
+				transformOrigin: '-35px 44px'
+			});
+
+			gsap.to(this.$refs.legRight, {
+				delay: delay + 0.5,
+				duration: 1,
+				rotation: -15,
+				transformOrigin: '-13px -6px'
+			});
+		},
+		animatePuffed() {
+			gsap.to(this.$refs.body, {
+				// scale: 1.1,
+				transformOrigin: '59px 65px'
+			});
+		}
+	}
 }
 </script>
 
@@ -132,12 +225,23 @@ export default {
 		fill: var(--primary-color);
 	}
 
+	&-mouth-open-tongue,
 	&-foot {
 		fill: var(--secondary-color);
 	}
 
+	&-mouth-open-inner,
 	&-eye {
 		fill: var(--black);
+	}
+
+	&-mouth,
+	&-mouth-open {
+		transform-origin: 72.5px 101.5px !important;
+	}
+
+	&-mouth-open {
+		transform: scale(0);
 	}
 
 	&-blush {
@@ -147,5 +251,13 @@ export default {
 	&-blush-small {
 		stroke-width: 2.5px;
 	}
+
+	// &-arm {
+		// transform-origin: 101px 98px !important;
+	// }
+
+	// &-face {
+		// transform-origin: 80px 83px !important;
+	// }
 }
 </style>

@@ -17,7 +17,10 @@
 				@keydown.enter="submitMail"
 			/>
 		</div>
-		<kirby />
+		<kirby 
+			:swallow="isValid" 
+			@animationdone="reset"
+		/>
 	</div>
 </template>
 
@@ -36,7 +39,8 @@ export default {
 		return {
 			emailValue: '',
 			emailIsDisabled: false,
-			emailText: ''
+			emailText: '',
+			isValid: false
 		}
 	},
 	methods: {
@@ -45,6 +49,7 @@ export default {
 			this.emailValue = '';
 			this.emailIsDisabled = true;
 
+			this.isValid = true;
 			this.$nextTick(this.animateText);
 		},
 		animateText() {
@@ -79,6 +84,11 @@ export default {
 						from: 'end'
 					}
 				});
+		},
+		reset() {
+			this.emailIsDisabled = false;
+			this.isValid = false;
+			this.emailText = '';
 		}
 	}
 }
