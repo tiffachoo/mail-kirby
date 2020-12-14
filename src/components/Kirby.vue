@@ -127,6 +127,24 @@
 				<path class="kirby-stroke kirby-mouth-open-inner" d="M94,105.69c0,14.36-11,23.31-22,23.31s-18-9-18-23.31S61,77,72,77,94,91.33,94,105.69Z"/>
 				<path class="kirby-stroke kirby-mouth-open-tongue" d="M72,129a22,22,0,0,0,18.91-11.18C90,109.51,82.8,101.07,74,101.07c-9.39,0-17,9.6-17,18.41,0,.11,0,.21,0,.32A16.16,16.16,0,0,0,72,129Z"/>
 			</g>
+			<g 
+				id="mouthFull"
+				ref="mouthFull"
+				class="kirby-mouth-full"
+			>
+				<path 
+					class="kirby-stroke" 
+					d="M68.45,101.5a6.42,6.42,0,0,1,4-1,7.1,7.1,0,0,1,4,1"
+				/>
+				<path 
+					class="kirby-stroke kirby-mouth-cheek" 
+					d="M78.07,106.19a5.17,5.17,0,0,1-1.2-4.75,5.63,5.63,0,0,1,2.76-4.11"
+				/>
+				<path 
+					class="kirby-stroke kirby-mouth-cheek" 
+					d="M67,99a4,4,0,0,1,1.5,2.76,4.31,4.31,0,0,1-.46,3.15"
+				/>
+			</g>
 		</svg>
 	</div>
 </template>
@@ -151,55 +169,116 @@ export default {
 			}
 		}
 	},
+	mounted() {
+		gsap.set(this.$refs.mouthOpen, {
+			transformOrigin: '17px 26px',
+			scale: 0
+		});
+
+		gsap.set(this.$refs.mouthFull, {
+			transformOrigin: 'center center',
+			scale: 0
+		});
+
+		gsap.set(this.$refs.face, {
+			transformOrigin: '25px bottom'
+		});
+
+		gsap.set(this.$refs.armLeft, {
+			transformOrigin: '70px 42px'
+		});
+
+		gsap.set(this.$refs.armRight, {
+			transformOrigin: '-35px 44px'
+		});
+
+		gsap.set(this.$refs.legRight, {
+			transformOrigin: '-13px -6px'
+		});
+
+		gsap.set(this.$refs.body, {
+			transformOrigin: 'left bottom'
+		});
+	},
 	methods: {
 		animateInhale() {
 			const delay = 0.1;
-			const tl = gsap.timeline();
-			tl
+			const tlMouth = gsap.timeline();
+			tlMouth
 				.to(this.$refs.mouth, {
 					duration: delay,
-					scale: 0.5
+					scale: 0
 				})
 				.to(this.$refs.mouthOpen, {
 					duration: 0.5,
-					scale: 1,
-					x: 0,
-					y: 0
+					scale: 1
 				});
 
 			gsap.to(this.$refs.face, {
 				delay,
 				duration: 0.5,
 				rotation: 5,
-				transformOrigin: '25px bottom',
 				y: -20
 			});
 
 			gsap.to(this.$refs.armLeft, {
 				delay,
 				duration: 0.7,
-				rotation: 80,
-				transformOrigin: '70px 42px'
+				rotation: 80
 			});
 
 			gsap.to(this.$refs.armRight, {
 				delay,
 				duration: 0.7,
-				rotation: -15,
-				transformOrigin: '-35px 44px'
+				rotation: -15
 			});
 
 			gsap.to(this.$refs.legRight, {
-				delay: delay + 0.5,
+				delay: delay + 1,
 				duration: 1,
 				rotation: -15,
-				transformOrigin: '-13px -6px'
+				onComplete: this.animatePuffed
 			});
 		},
 		animatePuffed() {
+			const tlMouth = gsap.timeline();
+			tlMouth
+				.to(this.$refs.mouthOpen, {
+					duration: 0.5,
+					scale: 0
+				})
+				.to(this.$refs.mouthFull, {
+					duration: 0.3,
+					scale: 1
+				});
+
+			gsap.to(this.$refs.face, {
+				duration: 0.5,
+				rotate: 0,
+				y: 0
+			});
+
 			gsap.to(this.$refs.body, {
-				// scale: 1.1,
-				transformOrigin: '59px 65px'
+				duration: 1.5,
+				ease: 'elastic',
+				scale: 1.1
+			});
+
+			gsap.to(this.$refs.armRight, {
+				duration: 1.5,
+				ease: 'elastic',
+				rotation: 0,
+				x: 10
+			});
+
+			gsap.to(this.$refs.armLeft, {
+				duration: 1,
+				delay: 0.5,
+				rotate: 0
+			});
+
+			gsap.to(this.$refs.legRight, {
+				rotation: 0
 			});
 		}
 	}
@@ -235,14 +314,15 @@ export default {
 		fill: var(--black);
 	}
 
-	&-mouth,
-	&-mouth-open {
-		transform-origin: 72.5px 101.5px !important;
-	}
+	// &-mouth,
+	// &-mouth-open {
+	// 	transform-origin: 72.5px 101.5px !important;
+	// }
 
-	&-mouth-open {
-		transform: scale(0);
-	}
+	// &-mouth-full,
+	// &-mouth-open {
+	// 	transform: scale(0);
+	// }
 
 	&-blush {
 		stroke: var(--secondary-color);
