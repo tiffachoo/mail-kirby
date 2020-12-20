@@ -5,6 +5,12 @@
 			class="kirby"
 			viewBox="0 0 200 200"
 		>
+			<defs>
+				<path
+					ref="bodySwallow"
+					d="M104.29,88c33.94,0,59.29,17.2,59.29,32.58,0,8.34-1.28,14.4-7.69,18.83-7.63,5.27-22.25,7.83-44.7,7.83-2.19,0-4.49,0-6.84-.07-26.18-.55-42.32-3.11-50.8-8.07-7.15-4.19-8.55-10-8.55-18.52C45,105.2,70.36,88,104.29,88m0-3C69.89,85,42,102.59,42,120.58s6,28.42,62.29,29.59q3.58.08,6.9.07c49.89,0,55.39-12.43,55.39-29.66,0-18-27.89-35.58-62.29-35.58Z"
+				/>
+			</defs>
 			<g id="legLeft">
 				<ellipse 
 					class="kirby-foot" 
@@ -63,12 +69,14 @@
 				ref="body"
 			>
 				<circle 
+					ref="bodyFill"
 					class="kirby-body" 
 					cx="101.5" 
 					cy="95.5" 
 					r="57.5"
 				/>
 				<circle 
+					ref="bodyStroke"
 					class="kirby-stroke" 
 					cx="100.5" 
 					cy="91.5" 
@@ -94,24 +102,40 @@
 			>
 				<path 
 					id="eyeRight"
+					ref="eyeRight"
 					class="kirby-eye" 
 					d="M84,84.53c0,5.8-1.57,9.47-3.5,9.47S77,90.33,77,84.53,78.57,73,80.5,73,84,78.73,84,84.53Z"
 				/>
 				<path 
 					id="eyeLeft"
+					ref="eyeLeft"
 					class="kirby-eye" 
 					d="M68,84.53c0,5.8-1.57,9.47-3.5,9.47S61,90.33,61,84.53,62.57,73,64.5,73,68,78.73,68,84.53Z"
 				/>
 				<path 
-					id="cheekRight" 
-					class="kirby-blush kirby-stroke" 
-					d="M93,92.94A22.41,22.41,0,0,1,101.66,89l1.09,5.41s2.74-2.94,8.66-3.93"
+					id="eyeRightClosed" 
+					ref="eyeRightClosed" 
+					class="kirby-stroke" 
+					d="M80.69,125.12c.37-1.41,1.89-3.8,4-6.35a22.84,22.84,0,0,1,5.61-5.14"
 				/>
 				<path 
-					id="cheekLeft" 
-					class="kirby-blush kirby-blush-small kirby-stroke" 
-					d="M47,92.94A11,11,0,0,1,51.19,89l.52,5.41a8,8,0,0,1,4.19-3.93"
+					id="eyeLeftClosed" 
+					ref="eyeLeftClosed" 
+					class="kirby-stroke" 
+					d="M55.05,113.61c1.33.61,3.42,2.52,5.56,5.07a23.08,23.08,0,0,1,4.09,6.42"
 				/>
+				<g ref="cheeks">
+					<path 
+						id="cheekRight" 
+						class="kirby-blush kirby-stroke" 
+						d="M93,92.94A22.41,22.41,0,0,1,101.66,89l1.09,5.41s2.74-2.94,8.66-3.93"
+					/>
+					<path 
+						id="cheekLeft" 
+						class="kirby-blush kirby-blush-small kirby-stroke" 
+						d="M47,92.94A11,11,0,0,1,51.19,89l.52,5.41a8,8,0,0,1,4.19-3.93"
+					/>
+				</g>
 			</g>
 			<path 
 				id="mouth" 
@@ -150,7 +174,8 @@
 </template>
 
 <script>
-import { gsap } from "gsap";
+import { gsap } from 'gsap';
+
 export default {
 	name: 'kirby',
 	props: {
@@ -180,6 +205,24 @@ export default {
 			scale: 0
 		});
 
+		gsap.set(this.$refs.eyeLeft, {
+			transformOrigin: 'center 17px'
+		});
+
+		gsap.set(this.$refs.eyeRight, {
+			transformOrigin: 'center 17px'
+		});
+
+		gsap.set(this.$refs.eyeLeftClosed, {
+			transformOrigin: 'center bottom',
+			scaleY: 0
+		});
+
+		gsap.set(this.$refs.eyeRightClosed, {
+			transformOrigin: 'center bottom',
+			scaleY: 0
+		});
+
 		gsap.set(this.$refs.face, {
 			transformOrigin: '25px bottom'
 		});
@@ -198,6 +241,14 @@ export default {
 
 		gsap.set(this.$refs.body, {
 			transformOrigin: 'left bottom'
+		});
+		
+		gsap.set(this.$refs.bodyStroke, {
+			transformOrigin: 'center bottom'
+		});
+		
+		gsap.set(this.$refs.bodyFill, {
+			transformOrigin: 'center bottom'
 		});
 	},
 	methods: {
@@ -272,14 +323,58 @@ export default {
 			});
 
 			gsap.to(this.$refs.armLeft, {
-				duration: 1,
+				duration: 0.6,
 				delay: 0.5,
-				rotate: 0
+				rotate: 0,
+				onComplete: this.animateSwallow
 			});
 
 			gsap.to(this.$refs.legRight, {
-				rotation: 0
+				duration: 0.6,
+				rotation: 0,
+				y: 10
 			});
+		},
+		animateSwallow() {
+			const tlEyes = gsap.timeline();
+			const swallowDur = {
+				duration: 1,
+				ease: 'elastic',
+			};
+
+			tlEyes
+				.to([this.$refs.eyeLeft, this.$refs.eyeRight], {
+					duration: 0.1,
+					scaleY: 0
+				})
+				.to([this.$refs.eyeLeftClosed, this.$refs.eyeRightClosed], {
+					duration: 0.3,
+					scaleY: 1
+				});
+
+			gsap.to(this.$refs.cheeks, {
+				...swallowDur,
+				y: 40
+			});
+
+			gsap.to([this.$refs.bodyStroke, this.$refs.bodyFill], {
+				...swallowDur,
+				// morphSVG: this.$refs.bodySwallow,
+				scaleY: 0.57
+			});
+
+			gsap.to(this.$refs.armLeft, {
+				...swallowDur,
+				rotation: 80,
+				y: 40
+			});
+
+			gsap.to(this.$refs.armRight, {
+				...swallowDur,
+				rotation: -50,
+				y: 40
+			});
+			
 		}
 	}
 }
