@@ -4,6 +4,7 @@ $white: #fff;
 $primary-color: #f9dde3;
 $primary-color-tint: #fcf2f5;
 $secondary-color: #ff2961;
+$accent-color: #fff1b8;
 
 $primary-font: 'Fredoka One', sans-serif;
 
@@ -13,4 +14,5 @@ $primary-font: 'Fredoka One', sans-serif;
 	--primary-color: #{$primary-color};
 	--primary-color-tint: #{$primary-color-tint};
 	--secondary-color: #{$secondary-color};
+	--accent-color: #{$accent-color};
 }

@@ -10,7 +10,19 @@
 					ref="bodySwallow"
 					d="M104.29,88c33.94,0,59.29,17.2,59.29,32.58,0,8.34-1.28,14.4-7.69,18.83-7.63,5.27-22.25,7.83-44.7,7.83-2.19,0-4.49,0-6.84-.07-26.18-.55-42.32-3.11-50.8-8.07-7.15-4.19-8.55-10-8.55-18.52C45,105.2,70.36,88,104.29,88m0-3C69.89,85,42,102.59,42,120.58s6,28.42,62.29,29.59q3.58.08,6.9.07c49.89,0,55.39-12.43,55.39-29.66,0-18-27.89-35.58-62.29-35.58Z"
 				/>
+				<path 
+					id="star"
+					class="kirby-star" 
+					d="M119.43,124.74l4.63-5.32a4.08,4.08,0,0,0-2.39-6.7l-5.23-1a.9.9,0,0,1-.56-.39l-4.67-7.69a4.28,4.28,0,0,0-7.27,0l-4.68,7.69a.85.85,0,0,1-.56.39l-5.23,1a4.09,4.09,0,0,0-2.39,6.7l4.63,5.32a.77.77,0,0,1,.18.72l-1.51,6a4.19,4.19,0,0,0,5.82,4.73l7-3a.89.89,0,0,1,.68,0l7,3a4.19,4.19,0,0,0,5.82-4.73l-1.51-6A.82.82,0,0,1,119.43,124.74Z"
+				/>
 			</defs>
+			<transition-group @enter="animateStar">
+				<use 
+					v-for="index in starIsVisible"
+					:key="`star${index}`"
+					href="#star" 
+				/>
+			</transition-group>
 			<g id="legLeft">
 				<ellipse 
 					class="kirby-foot" 
@@ -169,6 +181,12 @@
 					d="M67,99a4,4,0,0,1,1.5,2.76,4.31,4.31,0,0,1-.46,3.15"
 				/>
 			</g>
+			<path 
+				id="mouthFrown" 
+				ref="mouthFrown" 
+				class="kirby-stroke" 
+				d="M70,133.5a2.2,2.2,0,0,1,2-1,2.4,2.4,0,0,1,2,1"
+			/>
 		</svg>
 	</div>
 </template>
@@ -181,6 +199,11 @@ export default {
 	props: {
 		swallow: Boolean,
 		inhale: Boolean
+	},
+	data() {
+		return {
+			starIsVisible: 0
+		};
 	},
 	watch: {
 		swallow() {
@@ -203,6 +226,11 @@ export default {
 		gsap.set(this.$refs.mouthFull, {
 			transformOrigin: 'center center',
 			scale: 0
+		});
+
+		gsap.set(this.$refs.mouthFrown, {
+			transformOrigin: 'center center',
+			scaleY: 0
 		});
 
 		gsap.set(this.$refs.eyeLeft, {
@@ -337,7 +365,8 @@ export default {
 		},
 		animateSwallow() {
 			const tlEyes = gsap.timeline();
-			const swallowDur = {
+			const tlMouth = gsap.timeline();
+			const dur = {
 				duration: 1,
 				ease: 'elastic',
 			};
@@ -352,29 +381,135 @@ export default {
 					scaleY: 1
 				});
 
+			tlMouth
+				.to(this.$refs.mouthFull, {
+					duration: 0.1,
+					scaleY: 0,
+					y: 35
+				})
+				.to(this.$refs.mouthFrown, {
+					duration: 0.1,
+					scaleY: 1,
+					onComplete: () => { 
+						this.starIsVisible = 2;
+					}
+				});
+
 			gsap.to(this.$refs.cheeks, {
-				...swallowDur,
+				...dur,
 				y: 40
 			});
 
 			gsap.to([this.$refs.bodyStroke, this.$refs.bodyFill], {
-				...swallowDur,
+				...dur,
 				// morphSVG: this.$refs.bodySwallow,
-				scaleY: 0.57
+				scaleY: 0.57,
+				onComplete: this.animatePowerUp
+			});
+
+			gsap.to(this.$refs.body, {
+				...dur,
+				scale: 1
 			});
 
 			gsap.to(this.$refs.armLeft, {
-				...swallowDur,
-				rotation: 80,
-				y: 40
+				...dur,
+				rotation: 70,
+				y: 50
 			});
 
 			gsap.to(this.$refs.armRight, {
-				...swallowDur,
+				...dur,
 				rotation: -50,
-				y: 40
+				x: 0,
+				y: 50
+			});
+		},
+		animatePowerUp() {
+			this.animateReset();
+		},
+		animateReset() {
+			const tlEyes = gsap.timeline();
+			const tlMouth = gsap.timeline();
+			const dur = {
+				delay: 0.2,
+				duration: 1,
+				ease: 'elastic',
+			};
+
+			tlEyes
+				.to([this.$refs.eyeLeftClosed, this.$refs.eyeRightClosed], {
+					delay: 0.3,
+					duration: 0.1,
+					scaleY: 0
+				})
+				.to([this.$refs.eyeLeft, this.$refs.eyeRight], {
+					duration: 0.3,
+					scaleY: 1
+				});
+
+
+			tlMouth
+				.to(this.$refs.mouthFrown, {
+					delay: 0.3,
+					duration: 0.1,
+					scaleY: 0,
+					y: -35
+				})
+				.to(this.$refs.mouth, {
+					duration: 0.1,
+					scale: 1
+				});
+
+			gsap.to(this.$refs.cheeks, {
+				...dur,
+				y: 0
 			});
 			
+			gsap.to([this.$refs.bodyStroke, this.$refs.bodyFill], {
+				...dur,
+				scaleY: 1
+			});
+
+			gsap.to(this.$refs.armLeft, {
+				...dur,
+				rotation: 0,
+				y: 0
+			});
+
+			gsap.to(this.$refs.armRight, {
+				...dur,
+				rotation: 0,
+				y: 0
+			});
+
+			gsap.to(this.$refs.legRight, {
+				y: 0
+			});
+		},
+		animateStar(el, done) {
+			const tl = gsap.timeline({ onComplete: done });
+
+			gsap.set(el, {
+				scale: 0,
+				transformOrigin: 'center center'
+			});
+
+			tl
+				.to(el, {
+					delay: 'random(0, 0.5)',
+					duration: 0.6,
+					rotation: 500,
+					scale: 1,
+					x: 'random(-120, 120)',
+					y: 'random(-120, -50)'
+				})
+				.to(el, {
+					duration: 1,
+					ease: 'elastic',
+					opacity: 0,
+					scale: 2
+				});
 		}
 	}
 }
@@ -385,6 +520,7 @@ export default {
 	display: inline-block;
 	height: 12.5rem;
 	width: 12.5rem;
+	overflow: visible;
 
 	&-stroke {
 		stroke: var(--black);
@@ -414,11 +550,6 @@ export default {
 	// 	transform-origin: 72.5px 101.5px !important;
 	// }
 
-	// &-mouth-full,
-	// &-mouth-open {
-	// 	transform: scale(0);
-	// }
-
 	&-blush {
 		stroke: var(--secondary-color);
 	}
@@ -434,5 +565,9 @@ export default {
 	// &-face {
 		// transform-origin: 80px 83px !important;
 	// }
+
+	&-star {
+		fill: var(--accent-color);
+	}
 }
 </style>
