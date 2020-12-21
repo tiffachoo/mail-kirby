@@ -347,14 +347,13 @@ export default {
 				duration: 1.5,
 				ease: 'elastic',
 				rotation: 0,
-				x: 10
+				x: 10,
+				onComplete: this.animateSwallow
 			});
 
 			gsap.to(this.$refs.armLeft, {
-				duration: 0.6,
-				delay: 0.5,
-				rotate: 0,
-				onComplete: this.animateSwallow
+				duration: 0.3,
+				rotate: 0
 			});
 
 			gsap.to(this.$refs.legRight, {
@@ -367,8 +366,9 @@ export default {
 			const tlEyes = gsap.timeline();
 			const tlMouth = gsap.timeline();
 			const dur = {
-				duration: 1,
-				ease: 'elastic',
+				// delay: -0.2,
+				duration: 0.8,
+				ease: 'elastic'
 			};
 
 			tlEyes
@@ -377,7 +377,7 @@ export default {
 					scaleY: 0
 				})
 				.to([this.$refs.eyeLeftClosed, this.$refs.eyeRightClosed], {
-					duration: 0.3,
+					duration: 0.2,
 					scaleY: 1
 				});
 
@@ -439,7 +439,7 @@ export default {
 
 			tlEyes
 				.to([this.$refs.eyeLeftClosed, this.$refs.eyeRightClosed], {
-					delay: 0.3,
+					delay: 0.2,
 					duration: 0.1,
 					scaleY: 0
 				})
@@ -448,10 +448,9 @@ export default {
 					scaleY: 1
 				});
 
-
 			tlMouth
 				.to(this.$refs.mouthFrown, {
-					delay: 0.3,
+					delay: 0.2,
 					duration: 0.1,
 					scaleY: 0,
 					y: -35
