@@ -187,6 +187,73 @@
 				class="kirby-stroke" 
 				d="M70,133.5a2.2,2.2,0,0,1,2-1,2.4,2.4,0,0,1,2,1"
 			/>
+			<g 
+				id="hat"
+				ref="hat"
+			>
+				<path 
+					class="kirby-hat-dark" 
+					d="M49.22,47a1.9,1.9,0,0,0-1.45,2.88C50,53.75,56.78,57,66.94,57c9.89,0,27.64-2.29,39.38-6.32,1.85-.64,1.43-3.68-.51-3.68Z"
+				/>
+				<path 
+					class="kirby-hat" 
+					d="M133.68,46H72.21A9.21,9.21,0,0,1,63,36.79h0a9.2,9.2,0,0,1,10.66-9.08l60.7,9.71A4.31,4.31,0,0,1,138,41.68h0A4.31,4.31,0,0,1,133.68,46Z"
+				/>
+				<path 
+					class="kirby-stroke" 
+					d="M129.68,42H68.21A9.21,9.21,0,0,1,59,32.79h0a9.2,9.2,0,0,1,10.66-9.08l60.7,9.71A4.31,4.31,0,0,1,134,37.68h0A4.31,4.31,0,0,1,129.68,42Z"
+				/>
+				<rect 
+					class="kirby-hat-band kirby-stroke" 
+					x="65" 
+					y="42.04" 
+					width="43" 
+					height="7"
+				/>
+				<rect 
+					class="kirby-hat-dark kirby-stroke" 
+					x="106" 
+					y="44" 
+					width="24" 
+					height="4"
+				/>
+				<circle 
+					class="kirby-hat-band kirby-stroke" 
+					cx="106.5" 
+					cy="45.5" 
+					r="4.5"
+				/>
+			</g>
+			<g 
+				id="envelope"
+				ref="envelope"
+			>
+				<rect 
+					class="kirby-envelope" 
+					x="130.99" 
+					y="9" 
+					width="67.5" 
+					height="45" 
+					rx="10"
+				/>
+				<rect 
+					class="kirby-stroke" 
+					x="129.85" 
+					y="3" 
+					width="67.5" 
+					height="45" 
+					rx="10"
+				/>
+				<polyline 
+					class="kirby-stroke" 
+					points="131.85 10 163.6 31.5 195.35 10"
+				/>
+				<path 
+					ref="envelopeStar"
+					class="kirby-envelope-star kirby-stroke" 
+					d="M170,31l2.48-2.93a2.26,2.26,0,0,0-1.28-3.68l-2.8-.56a.46.46,0,0,1-.3-.22l-2.51-4.23a2.26,2.26,0,0,0-3.89,0l-2.51,4.23a.46.46,0,0,1-.3.22l-2.8.56a2.26,2.26,0,0,0-1.28,3.68L157.25,31a.45.45,0,0,1,.1.4l-.81,3.32a2.26,2.26,0,0,0,3.12,2.6l3.76-1.67a.48.48,0,0,1,.37,0l3.76,1.67a2.26,2.26,0,0,0,3.12-2.6l-.81-3.32A.45.45,0,0,1,170,31Z"
+				/>
+			</g>
 		</svg>
 	</div>
 </template>
@@ -209,11 +276,6 @@ export default {
 		swallow() {
 			if (this.swallow) {
 				this.animateInhale();
-
-				// temp un-disable 
-				setTimeout(() => {
-					this.$emit('animationdone');
-				}, 5000)
 			}
 		}
 	},
@@ -277,6 +339,22 @@ export default {
 		
 		gsap.set(this.$refs.bodyFill, {
 			transformOrigin: 'center bottom'
+		});
+
+		gsap.set(this.$refs.hat, {
+			scale: 0,
+			transformOrigin: 'center bottom'
+		});
+
+		gsap.set(this.$refs.envelope, {
+			scale: 0,
+			transformOrigin: 'center bottom',
+			y: 10
+		});
+
+		gsap.set(this.$refs.envelopeStar, {
+			scale: 0,
+			transformOrigin: 'center center'
 		});
 	},
 	methods: {
@@ -436,7 +514,80 @@ export default {
 			});
 		},
 		animatePowerUp() {
+			const delay = 0.6;
+			const envelopTl = gsap.timeline({
+				onComplete: () => {
+					this.$emit('animationdone');
+				}
+			});
+
 			this.animateReset();
+
+			gsap.to(this.$refs.hat, {
+				startAt: {
+					opacity: 1,
+					scale: 0,
+					y: 0
+				},
+				delay,
+				duration: 0.6,
+				ease: 'elastic',
+				scale: 1
+			});
+
+			envelopTl
+				.to(this.$refs.envelope, {
+					startAt: {
+						opacity: 1,
+						scale: 0,
+						y: 10
+					},
+					delay: delay + 0.3,
+					duration: 0.6,
+					ease: 'elastic',
+					scale: 1
+				})
+				.to(this.$refs.envelopeStar, {
+					startAt: {
+						rotation: 500,
+					},
+					duration: 1,
+					rotation: 0,
+					scale: 1
+				})
+				.to(this.$refs.envelope, {
+					delay: 1,
+					duration: 0.2,
+					scaleY: 0.7
+				})
+				.to(this.$refs.envelope, {
+					duration: 0.1,
+					scaleY: 1,
+					y: -5
+				})
+				.to(this.$refs.envelope, {
+					duration: 1.5,
+					ease: 'power2.inOut',
+					opacity: 0,
+					y: -110
+				})
+				.to(this.$refs.hat, {
+					delay: 0.5,
+					duration: 0.2,
+					opacity: 0,
+					scale: 0.7,
+					y: -20
+				})
+				.to(this.$refs.legRight, {
+					duration: 0.6,
+					rotation: 0
+				});
+
+			gsap.to(this.$refs.legRight, {
+				delay: delay + 1,
+				duration: 1,
+				rotation: -15
+			});
 		},
 		animateReset() {
 			const tlEyes = gsap.timeline();
@@ -555,6 +706,7 @@ export default {
 		fill: var(--secondary-color);
 	}
 
+	&-hat-dark,
 	&-mouth-open-inner,
 	&-eye {
 		fill: var(--black);
@@ -581,8 +733,21 @@ export default {
 		// transform-origin: 80px 83px !important;
 	// }
 
+	&-hat-band,
 	&-star {
 		fill: var(--accent-color);
+	}
+
+	&-hat {
+		fill: var(--mail-color);
+	}
+
+	&-envelope {
+		fill: var(--white);
+
+		&-star {
+			fill: var(--primary-color);
+		}
 	}
 }
 </style>

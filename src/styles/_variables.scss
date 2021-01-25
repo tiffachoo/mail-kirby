@@ -6,6 +6,8 @@ $primary-color-tint: #fcf2f5;
 $secondary-color: #ff2961;
 $accent-color: #fff1b8;
 
+$mail-color: #326dcc;
+
 $primary-font: 'Fredoka One', sans-serif;
 
 :root {
@@ -15,4 +17,5 @@ $primary-font: 'Fredoka One', sans-serif;
 	--primary-color-tint: #{$primary-color-tint};
 	--secondary-color: #{$secondary-color};
 	--accent-color: #{$accent-color};
+	--mail-color: #{$mail-color};
 }
