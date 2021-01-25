@@ -323,12 +323,16 @@ export default {
 			const tlMouth = gsap.timeline();
 			tlMouth
 				.to(this.$refs.mouthOpen, {
-					duration: 0.5,
+					duration: 0.2,
 					scale: 0
 				})
 				.to(this.$refs.mouthFull, {
-					duration: 0.3,
-					scale: 1
+					duration: 0.1,
+					scale: 1,
+					y: {
+						duration: 0,
+						value: 0
+					}
 				});
 
 			gsap.to(this.$refs.face, {
@@ -374,11 +378,13 @@ export default {
 			tlEyes
 				.to([this.$refs.eyeLeft, this.$refs.eyeRight], {
 					duration: 0.1,
-					scaleY: 0
+					scaleY: 0,
+					y: 20
 				})
 				.to([this.$refs.eyeLeftClosed, this.$refs.eyeRightClosed], {
 					duration: 0.2,
-					scaleY: 1
+					scaleY: 1,
+					y: 0
 				});
 
 			tlMouth
@@ -390,6 +396,10 @@ export default {
 				.to(this.$refs.mouthFrown, {
 					duration: 0.1,
 					scaleY: 1,
+					y: {
+						duration: 0,
+						value: 0
+					},
 					onComplete: () => { 
 						this.starIsVisible = 2;
 					}
@@ -436,16 +446,22 @@ export default {
 				duration: 1,
 				ease: 'elastic',
 			};
+			this.starIsVisible = 0;
 
 			tlEyes
 				.to([this.$refs.eyeLeftClosed, this.$refs.eyeRightClosed], {
 					delay: 0.2,
 					duration: 0.1,
-					scaleY: 0
+					scaleY: 0,
+					y: -20
 				})
 				.to([this.$refs.eyeLeft, this.$refs.eyeRight], {
-					duration: 0.3,
-					scaleY: 1
+					duration: 0.2,
+					scaleY: 1,
+					y: {
+						duration: 0.1,
+						value: 0
+					}
 				});
 
 			tlMouth
