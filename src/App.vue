@@ -19,7 +19,7 @@
 		</div>
 		<kirby 
 			:swallow="isValid"
-			:spit="!isValid"
+			:spit="isNotValid"
 			@animationdone="reset"
 		/>
 	</div>
@@ -41,7 +41,8 @@ export default {
 			emailValue: '',
 			emailIsDisabled: false,
 			emailText: '',
-			isValid: false
+			isValid: false,
+			isNotValid: false
 		}
 	},
 	methods: {
@@ -53,6 +54,7 @@ export default {
 	
 				const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 				this.isValid = emailRegex.test(this.emailText);
+				this.isNotValid = !this.isValid;
 	
 				this.$nextTick(this.animateText);
 			}
@@ -93,6 +95,7 @@ export default {
 		reset() {
 			this.emailIsDisabled = false;
 			this.isValid = false;
+			this.isNotValid = false;
 			this.emailText = '';
 		}
 	}

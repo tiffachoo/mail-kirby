@@ -275,11 +275,23 @@ export default {
 	watch: {
 		swallow() {
 			if (this.swallow) {
-				this.animateInhale();
+				this.animateInhale()
+					.then(this.animatePuffed)
+					.then(this.animateSwallow)
+					.then(this.animatePowerUp)
+					.then(() => {
+						this.$emit('animationdone');
+					})
 			}
 		},
 		spit() {
-			console.log('pew');
+			if (this.spit) {
+				this.animateInhale()
+					.then(this.animatePuffed)
+					.then(() => {
+						this.$emit('animationdone');
+					})
+			}
 		}
 	},
 	mounted() {
@@ -393,11 +405,10 @@ export default {
 				rotation: -15
 			});
 
-			gsap.to(this.$refs.legRight, {
+			return gsap.to(this.$refs.legRight, {
 				delay: delay + 1,
 				duration: 1,
-				rotation: -15,
-				onComplete: this.animatePuffed
+				rotation: -15
 			});
 		},
 		animatePuffed() {
@@ -428,14 +439,6 @@ export default {
 				scale: 1.1
 			});
 
-			gsap.to(this.$refs.armRight, {
-				duration: 1.5,
-				ease: 'elastic',
-				rotation: 0,
-				x: 10,
-				onComplete: this.animateSwallow
-			});
-
 			gsap.to(this.$refs.armLeft, {
 				duration: 0.3,
 				rotate: 0
@@ -445,6 +448,13 @@ export default {
 				duration: 0.6,
 				rotation: 0,
 				y: 10
+			});
+
+			return gsap.to(this.$refs.armRight, {
+				duration: 1.5,
+				ease: 'elastic',
+				rotation: 0,
+				x: 10
 			});
 		},
 		animateSwallow() {
@@ -491,13 +501,6 @@ export default {
 				y: 40
 			});
 
-			gsap.to([this.$refs.bodyStroke, this.$refs.bodyFill], {
-				...dur,
-				// morphSVG: this.$refs.bodySwallow,
-				scaleY: 0.57,
-				onComplete: this.animatePowerUp
-			});
-
 			gsap.to(this.$refs.body, {
 				...dur,
 				scale: 1
@@ -515,16 +518,24 @@ export default {
 				x: 0,
 				y: 50
 			});
+
+			return gsap.to([this.$refs.bodyStroke, this.$refs.bodyFill], {
+				...dur,
+				// morphSVG: this.$refs.bodySwallow,
+				scaleY: 0.57
+			});
 		},
 		animatePowerUp() {
 			const delay = 0.6;
-			const envelopTl = gsap.timeline({
-				onComplete: () => {
-					this.$emit('animationdone');
-				}
-			});
+			const envelopTl = gsap.timeline();
 
 			this.animateReset();
+
+			gsap.to(this.$refs.legRight, {
+				delay: delay + 1,
+				duration: 1,
+				rotation: -15
+			});
 
 			gsap.to(this.$refs.hat, {
 				startAt: {
@@ -538,7 +549,7 @@ export default {
 				scale: 1
 			});
 
-			envelopTl
+			return envelopTl
 				.to(this.$refs.envelope, {
 					startAt: {
 						opacity: 1,
@@ -585,12 +596,6 @@ export default {
 					duration: 0.6,
 					rotation: 0
 				});
-
-			gsap.to(this.$refs.legRight, {
-				delay: delay + 1,
-				duration: 1,
-				rotation: -15
-			});
 		},
 		animateReset() {
 			const tlEyes = gsap.timeline();
