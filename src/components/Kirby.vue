@@ -374,6 +374,8 @@ export default {
 	},
 	methods: {
 		animateInhale() {
+			const tlInhale = gsap.timeline();
+
 			const delay = 0.1;
 			const tlMouth = gsap.timeline();
 			tlMouth
@@ -386,32 +388,41 @@ export default {
 					scale: 1
 				});
 
-			gsap.to(this.$refs.face, {
+			const face = gsap.to(this.$refs.face, {
 				delay,
 				duration: 0.5,
 				rotation: 5,
 				y: -20
 			});
 
-			gsap.to(this.$refs.armLeft, {
+			const armLeft = gsap.to(this.$refs.armLeft, {
 				delay,
 				duration: 0.7,
 				rotation: 80
 			});
 
-			gsap.to(this.$refs.armRight, {
+			const armRight = gsap.to(this.$refs.armRight, {
 				delay,
 				duration: 0.7,
 				rotation: -15
 			});
 
-			return gsap.to(this.$refs.legRight, {
+			const legRight = gsap.to(this.$refs.legRight, {
 				delay: delay + 1,
 				duration: 1,
 				rotation: -15
 			});
+
+			tlInhale.add(tlMouth, 0);
+			tlInhale.add(face, 0);
+			tlInhale.add(armLeft, 0);
+			tlInhale.add(armRight, 0);
+			tlInhale.add(legRight, 0);
+			return tlInhale;
 		},
 		animatePuffed() {
+			const tlPuffed = gsap.timeline();
+
 			const tlMouth = gsap.timeline();
 			tlMouth
 				.to(this.$refs.mouthOpen, {
@@ -427,37 +438,47 @@ export default {
 					}
 				});
 
-			gsap.to(this.$refs.face, {
+			const face = gsap.to(this.$refs.face, {
 				duration: 0.5,
 				rotate: 0,
 				y: 0
 			});
 
-			gsap.to(this.$refs.body, {
+			const body = gsap.to(this.$refs.body, {
 				duration: 1.5,
 				ease: 'elastic',
 				scale: 1.1
 			});
 
-			gsap.to(this.$refs.armLeft, {
+			const armLeft = gsap.to(this.$refs.armLeft, {
 				duration: 0.3,
 				rotate: 0
 			});
 
-			gsap.to(this.$refs.legRight, {
-				duration: 0.6,
-				rotation: 0,
-				y: 10
-			});
-
-			return gsap.to(this.$refs.armRight, {
+			const armRight = gsap.to(this.$refs.armRight, {
 				duration: 1.5,
 				ease: 'elastic',
 				rotation: 0,
 				x: 10
 			});
+
+			const legRight = gsap.to(this.$refs.legRight, {
+				duration: 0.6,
+				rotation: 0,
+				y: 10
+			});
+
+			tlPuffed.add(tlMouth, 0);
+			tlPuffed.add(face, 0);
+			tlPuffed.add(body, 0);
+			tlPuffed.add(armLeft, 0);
+			tlPuffed.add(armRight, 0);
+			tlPuffed.add(legRight, 0);
+			return tlPuffed;
 		},
 		animateSwallow() {
+			const tlSwallow = gsap.timeline();
+
 			const tlEyes = gsap.timeline();
 			const tlMouth = gsap.timeline();
 			const dur = {
@@ -496,48 +517,59 @@ export default {
 					}
 				});
 
-			gsap.to(this.$refs.cheeks, {
+			const cheeks = gsap.to(this.$refs.cheeks, {
 				...dur,
 				y: 40
 			});
 
-			gsap.to(this.$refs.body, {
+			const body = gsap.to(this.$refs.body, {
 				...dur,
 				scale: 1
 			});
 
-			gsap.to(this.$refs.armLeft, {
+			const bodyStroke = gsap.to([this.$refs.bodyStroke, this.$refs.bodyFill], {
+				...dur,
+				// morphSVG: this.$refs.bodySwallow,
+				scaleY: 0.57
+			});
+
+			const armLeft = gsap.to(this.$refs.armLeft, {
 				...dur,
 				rotation: 70,
 				y: 50
 			});
 
-			gsap.to(this.$refs.armRight, {
+			const armRight = gsap.to(this.$refs.armRight, {
 				...dur,
 				rotation: -50,
 				x: 0,
 				y: 50
 			});
 
-			return gsap.to([this.$refs.bodyStroke, this.$refs.bodyFill], {
-				...dur,
-				// morphSVG: this.$refs.bodySwallow,
-				scaleY: 0.57
-			});
+			tlSwallow.add( tlEyes, 0);
+			tlSwallow.add( tlMouth, 0);
+			tlSwallow.add( cheeks, 0);
+			tlSwallow.add( body, 0);
+			tlSwallow.add( bodyStroke, 0);
+			tlSwallow.add( armLeft, 0);
+			tlSwallow.add( armRight, 0);
+			return tlSwallow
 		},
 		animatePowerUp() {
+			const tlPowerUp = gsap.timeline();
+
 			const delay = 0.6;
-			const envelopTl = gsap.timeline();
+			const tlEnvelope = gsap.timeline();
 
 			this.animateReset();
 
-			gsap.to(this.$refs.legRight, {
+			const legRight = gsap.to(this.$refs.legRight, {
 				delay: delay + 1,
 				duration: 1,
 				rotation: -15
 			});
 
-			gsap.to(this.$refs.hat, {
+			const hat = gsap.to(this.$refs.hat, {
 				startAt: {
 					opacity: 1,
 					scale: 0,
@@ -549,7 +581,7 @@ export default {
 				scale: 1
 			});
 
-			return envelopTl
+			tlEnvelope
 				.to(this.$refs.envelope, {
 					startAt: {
 						opacity: 1,
@@ -596,6 +628,11 @@ export default {
 					duration: 0.6,
 					rotation: 0
 				});
+			
+			tlPowerUp.add( legRight, 0);
+			tlPowerUp.add( hat, 0);
+			tlPowerUp.add( tlEnvelope, 0);
+			return tlPowerUp;
 		},
 		animateReset() {
 			const tlEyes = gsap.timeline();
