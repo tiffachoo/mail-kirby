@@ -18,7 +18,8 @@
 			/>
 		</div>
 		<kirby 
-			:swallow="isValid" 
+			:swallow="isValid"
+			:spit="!isValid"
 			@animationdone="reset"
 		/>
 	</div>
@@ -45,12 +46,16 @@ export default {
 	},
 	methods: {
 		submitMail() {
-			this.emailText = this.emailValue;
-			this.emailValue = '';
-			this.emailIsDisabled = true;
-
-			this.isValid = true;
-			this.$nextTick(this.animateText);
+			if (this.emailValue) {
+				this.emailText = this.emailValue;
+				this.emailValue = '';
+				this.emailIsDisabled = true;
+	
+				const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+				this.isValid = emailRegex.test(this.emailText);
+	
+				this.$nextTick(this.animateText);
+			}
 		},
 		animateText() {
 			const tl = gsap.timeline({ delay: 1 });

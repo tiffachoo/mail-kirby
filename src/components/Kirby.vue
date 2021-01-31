@@ -265,7 +265,7 @@ export default {
 	name: 'kirby',
 	props: {
 		swallow: Boolean,
-		inhale: Boolean
+		spit: Boolean
 	},
 	data() {
 		return {
@@ -277,6 +277,9 @@ export default {
 			if (this.swallow) {
 				this.animateInhale();
 			}
+		},
+		spit() {
+			console.log('pew');
 		}
 	},
 	mounted() {

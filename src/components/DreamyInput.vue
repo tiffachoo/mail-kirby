@@ -4,7 +4,7 @@
 			:disabled="disabled"
 			:value="modelValue"
 			class="dreamy-input-control"
-			type="text"
+			type="email"
 			@input="$emit('update:modelValue', $event.target.value)"
 		>
 	</div>
@@ -16,7 +16,8 @@ export default {
 	props: {
 		disabled: Boolean,
 		modelValue: String
-	}
+	},
+	emits: ['update:modelValue']
 }
 </script>
 
