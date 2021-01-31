@@ -187,6 +187,10 @@
 				class="kirby-stroke" 
 				d="M70,133.5a2.2,2.2,0,0,1,2-1,2.4,2.4,0,0,1,2,1"
 			/>
+			<use 
+				ref="star"
+				href="#star" 
+			/>
 			<g 
 				id="hat"
 				ref="hat"
@@ -288,6 +292,7 @@ export default {
 			if (this.spit) {
 				this.animateInhale()
 					.then(this.animatePuffed)
+					.then(this.animateSpit)
 					.then(() => {
 						this.$emit('animationdone');
 					})
@@ -370,6 +375,14 @@ export default {
 		gsap.set(this.$refs.envelopeStar, {
 			scale: 0,
 			transformOrigin: 'center center'
+		});
+
+		gsap.set(this.$refs.star, {
+			opacity: 0,
+			scale: 0,
+			transformOrigin: 'center center',
+			x: -40,
+			y: -20
 		});
 	},
 	methods: {
@@ -721,6 +734,58 @@ export default {
 					opacity: 0,
 					scale: 2
 				});
+		},
+		animateSpit() {
+			const tlSpit = gsap.timeline();
+
+			const tlMouth = gsap.timeline();
+
+			tlMouth
+				.to(this.$refs.mouthFull, {
+					duration: 0.05,
+					scaleY: 0
+				})
+				.to(this.$refs.mouthOpen, {
+					duration: 0.4,
+					scale: 0.3
+				})
+				.to(this.$refs.star, {
+					duration: 5,
+					rotation: 360,
+					opacity: 1,
+					scale: 1,
+					x: -300
+				})
+				.to(this.$refs.mouthOpen, {
+					duration: 0.1,
+					scale: 0
+				})
+				.to(this.$refs.mouth, {
+					duration: 0.1,
+					scale: 1
+				});
+
+			const body = gsap.to(this.$refs.body, {
+				duration: 0.7,
+				scale: 1
+			});
+
+			const armRight = gsap.to(this.$refs.armRight, {
+				duration: 0.7,
+				x: 0
+			});
+			
+			const legRight = gsap.to(this.$refs.legRight, {
+				duration: 0.6,
+				rotation: 0,
+				y: 0
+			});
+
+			tlSpit.add(tlMouth, 0);
+			tlSpit.add(body, 0);
+			tlSpit.add(armRight, 0);
+			tlSpit.add(legRight, 0);
+			return tlSpit;
 		}
 	}
 }
