@@ -21,6 +21,7 @@
 					v-for="index in starIsVisible"
 					:key="`star${index}`"
 					href="#star" 
+					class="kirby-star-splashy"
 				/>
 			</transition-group>
 			<g id="legLeft">
@@ -190,6 +191,7 @@
 			<use 
 				ref="star"
 				href="#star" 
+				class="kirby-star-spit"
 			/>
 			<g 
 				id="hat"
@@ -273,7 +275,8 @@ export default {
 	},
 	data() {
 		return {
-			starIsVisible: 0
+			starIsVisible: 0,
+			starPosition: null
 		};
 	},
 	watch: {
@@ -378,11 +381,8 @@ export default {
 		});
 
 		gsap.set(this.$refs.star, {
-			opacity: 0,
 			scale: 0,
-			transformOrigin: 'center center',
-			x: -40,
-			y: -20
+			transformOrigin: 'center center'
 		});
 	},
 	methods: {
@@ -655,7 +655,6 @@ export default {
 				duration: 1,
 				ease: 'elastic',
 			};
-			this.starIsVisible = 0;
 
 			tlEyes
 				.to([this.$refs.eyeLeftClosed, this.$refs.eyeRightClosed], {
@@ -712,28 +711,48 @@ export default {
 			});
 		},
 		animateStar(el, done) {
-			const tl = gsap.timeline({ onComplete: done });
+			const tl = gsap.timeline({ onComplete: () => {
+				this.starIsVisible = 0;
+				done();
+			}});
 
 			gsap.set(el, {
 				scale: 0,
 				transformOrigin: 'center center'
 			});
 
-			tl
-				.to(el, {
-					delay: 'random(0, 0.5)',
-					duration: 0.6,
-					rotation: 500,
-					scale: 1,
-					x: 'random(-120, 120)',
-					y: 'random(-120, -50)'
-				})
-				.to(el, {
-					duration: 1,
-					ease: 'elastic',
-					opacity: 0,
-					scale: 2
+			if (this.starIsVisible > 2) {
+				gsap.set(el, {
+					...this.starPosition
 				});
+
+				tl.to(el, {
+					delay: 'random(0, 0.5)',
+					duration: 'random(0.4, 0.7)',
+					opacity: 0,
+					rotation: 'random(360, 720)',
+					scale: 'random(0.2, 0.5)',
+					x: `random(${this.starPosition.x - 60}, ${this.starPosition.x + 60})`,
+					y: `random(${this.starPosition.y - 60}, ${this.starPosition.y + 60})`
+				});
+
+			} else {
+				tl
+					.to(el, {
+						delay: 'random(0, 0.5)',
+						duration: 0.6,
+						rotation: 500,
+						scale: 1,
+						x: 'random(-120, 120)',
+						y: 'random(-120, -50)'
+					})
+					.to(el, {
+						duration: 1,
+						ease: 'elastic',
+						opacity: 0,
+						scale: 2
+					});
+			}
 		},
 		animateSpit() {
 			const tlSpit = gsap.timeline();
@@ -750,20 +769,47 @@ export default {
 					scale: 0.3
 				})
 				.to(this.$refs.star, {
-					duration: 5,
-					rotation: 360,
-					opacity: 1,
+					startAt: {
+						opacity: 1,
+						rotation: 0,
+						scale: 0,
+						transformOrigin: 'center center',
+						x: -40,
+						y: -20
+					},
+					delay: -0.2,
+					duration: 1,
+					ease: 'power2.inOut',
+					rotation: 720,
 					scale: 1,
 					x: -300
+				})
+				.to(this.$refs.star, {
+					duration: 0.2,
+					scaleX: 0.9,
+					transformOrigin: 'left center',
+					onStart: () => {
+						this.starPosition = {
+							x: -300,
+							y: -20
+						};
+						this.starIsVisible = 6;
+					}
+				})
+				.to(this.$refs.star, {
+					duration: 0.2,
+					opacity: 0,
+					scaleX: 1,
+					transformOrigin: 'left center'
 				})
 				.to(this.$refs.mouthOpen, {
 					duration: 0.1,
 					scale: 0
-				})
+				}, '-=1')
 				.to(this.$refs.mouth, {
 					duration: 0.1,
 					scale: 1
-				});
+				}, '-=1.1');
 
 			const body = gsap.to(this.$refs.body, {
 				duration: 0.7,
@@ -793,6 +839,8 @@ export default {
 
 <style lang="scss">
 .kirby {
+	position: relative;
+	z-index: 5;
 	display: inline-block;
 	height: 12.5rem;
 	width: 12.5rem;
@@ -842,6 +890,19 @@ export default {
 	// &-face {
 		// transform-origin: 80px 83px !important;
 	// }
+
+	&-star {
+		stroke-width: 3px;
+		stroke: currentColor;
+
+		&-splashy {
+			color: transparent;
+		}
+
+		&-spit {
+			color: var(--black);
+		}
+	}
 
 	&-hat-band,
 	&-star {
