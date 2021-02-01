@@ -20,6 +20,7 @@
 				<use 
 					v-for="index in starIsVisible"
 					:key="`star${index}`"
+					:style="{ '--star-color': starIsVisible > 2 ? 'var(--star-sparkly-color)' : null }"
 					href="#star" 
 					class="kirby-star-splashy"
 				/>
@@ -632,7 +633,7 @@ export default {
 				})
 				.to(this.$refs.hat, {
 					delay: 0.5,
-					duration: 0.2,
+					duration: 0.3,
 					opacity: 0,
 					scale: 0.7,
 					y: -20
@@ -728,10 +729,10 @@ export default {
 
 				tl.to(el, {
 					delay: 'random(0, 0.5)',
-					duration: 'random(0.4, 0.7)',
+					duration: 'random(0.7, 1.1)',
 					opacity: 0,
 					rotation: 'random(360, 720)',
-					scale: 'random(0.2, 0.5)',
+					scale: 'random(0.3, 0.6)',
 					x: `random(${this.starPosition.x - 60}, ${this.starPosition.x + 60})`,
 					y: `random(${this.starPosition.y - 60}, ${this.starPosition.y + 60})`
 				});
@@ -740,7 +741,7 @@ export default {
 				tl
 					.to(el, {
 						delay: 'random(0, 0.5)',
-						duration: 0.6,
+						duration: 0.7,
 						rotation: 500,
 						scale: 1,
 						x: 'random(-120, 120)',
@@ -787,16 +788,16 @@ export default {
 				.to(this.$refs.star, {
 					duration: 0.2,
 					scaleX: 0.9,
-					transformOrigin: 'left center',
+					transformOrigin: 'left center'
+				})
+				.to(this.$refs.star, {
 					onStart: () => {
 						this.starPosition = {
 							x: -300,
 							y: -20
 						};
 						this.starIsVisible = 6;
-					}
-				})
-				.to(this.$refs.star, {
+					},
 					duration: 0.2,
 					opacity: 0,
 					scaleX: 1,
@@ -809,7 +810,7 @@ export default {
 				.to(this.$refs.mouth, {
 					duration: 0.1,
 					scale: 1
-				}, '-=1.1');
+				}, '-=0.9');
 
 			const body = gsap.to(this.$refs.body, {
 				duration: 0.7,
@@ -894,6 +895,7 @@ export default {
 	&-star {
 		stroke-width: 3px;
 		stroke: currentColor;
+		fill: var(--star-color);
 
 		&-splashy {
 			color: transparent;
@@ -904,8 +906,7 @@ export default {
 		}
 	}
 
-	&-hat-band,
-	&-star {
+	&-hat-band {
 		fill: var(--accent-color);
 	}
 

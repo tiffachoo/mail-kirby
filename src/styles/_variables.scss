@@ -7,6 +7,7 @@ $secondary-color: #ff2961;
 $accent-color: #fae798;
 
 $mail-color: #326dcc;
+$star-sparkly-color: #b8d7ff;
 
 $primary-font: 'Fredoka One', sans-serif;
 
@@ -18,4 +19,6 @@ $primary-font: 'Fredoka One', sans-serif;
 	--secondary-color: #{$secondary-color};
 	--accent-color: #{$accent-color};
 	--mail-color: #{$mail-color};
+	--star-color: #{$accent-color};
+	--star-sparkly-color: #{$star-sparkly-color};
 }
