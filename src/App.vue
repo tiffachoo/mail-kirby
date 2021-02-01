@@ -60,32 +60,35 @@ export default {
 			}
 		},
 		animateText() {
-			const tl = gsap.timeline({ delay: 1 });
-			tl
-				.to('.input-text-letter', {
-					y: 3,
-					duration: 0.05
-				})
-				.to('.input-text-letter', {
-					y: -5,
-					duration: 0.05
-				})
-				.to('.input-text-letter', {
-					y: 3,
+			const tlJiggle = gsap.timeline({ 
+				delay: 1, 
+				defaults: {
 					duration: 0.1
+				}
+			});
+			
+			tlJiggle
+				.to('.input-text-letter', {
+					y: 'random(-6, 4)'
 				})
 				.to('.input-text-letter', {
-					y: -5,
-					duration: 0.1
+					y: 'random(-6, 4)'
+				})
+				.to('.input-text-letter', {
+					y: 'random(-6, 4)'
+				})
+				.to('.input-text-letter', {
+					y: 'random(-6, 4)'
 				})
 				.to('.input-text-letter', {
 					y: 0,
 					duration: 0.1
 				})
 				.to('.input-text-letter', {
-					x: 300,
+					delay: 0,
 					duration: 0.5,
 					ease: 'expo.in',
+					x: 300,
 					stagger: {
 						amount: 0.3,
 						from: 'end'
