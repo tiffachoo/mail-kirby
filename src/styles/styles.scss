@@ -37,3 +37,15 @@ body {
 		transform-origin: center bottom;
 	}
 }
+
+.fade {
+	&-enter-active,
+	&-leave-active {
+		transition: 0.3s;
+	}
+
+	&-enter-from,
+	&-leave-to {
+		opacity: 0;
+	}
+}

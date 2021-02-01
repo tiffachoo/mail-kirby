@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<main class="container">
 		<div class="input-wrap">
 			<div 
 				v-if="emailText"
@@ -14,6 +14,7 @@
 			<dreamy-input 
 				v-model="emailValue" 
 				:disabled="emailIsDisabled"
+				:has-error="isNotValid"
 				@keydown.enter="submitMail"
 			/>
 		</div>
@@ -22,7 +23,7 @@
 			:spit="isNotValid"
 			@animationdone="reset"
 		/>
-	</div>
+	</main>
 </template>
 
 <script>
