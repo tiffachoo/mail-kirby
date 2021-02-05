@@ -66,7 +66,7 @@ export default {
 		height: 3.125rem;
 		padding: 0 1rem;
 		border: 0;
-		background-color: var(--white);
+		background-color: var(--primary-color);
 		font-family: $primary-font;
 		font-size: 1.25rem;
 		color: var(--black);

@@ -38,6 +38,22 @@ body {
 	}
 }
 
+.input-wrap {
+	position: relative;
+}
+
+.cloudy {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 170%;
+	transform: translate(-50%, -50%);
+
+	&-poofs {
+		fill: var(--white);
+	}
+}
+
 .fade {
 	&-enter-active,
 	&-leave-active {
