@@ -1,5 +1,8 @@
 <template>
-	<div class="dreamy-input">
+	<div 
+		:class="{ disabled }"
+		class="dreamy-input"
+	>
 		<label 
 			class="dreamy-input-label"
 			for="dreamyInput"
@@ -53,7 +56,7 @@ export default {
 		width: 100%;
 		border: 3px solid var(--black);
 		pointer-events: none;
-		transition: border 0.4s ease-in-out;
+		transition: border 0.5s ease-in-out;
 	}
 
 	&::after,
@@ -71,9 +74,14 @@ export default {
 		font-size: 1.25rem;
 		color: var(--black);
 		caret-color: var(--secondary-color);
+		transition: background-color 0.5s ease-in-out;
 
 		&:focus {
 			outline: none;
+		}
+
+		&:disabled {
+			background-color: var(--primary-color-tint);
 		}
 	}
 
@@ -99,6 +107,12 @@ export default {
 	&-error {
 		bottom: -1.5rem;
 		color: var(--secondary-color);
+	}
+
+	&.disabled {
+		&::after {
+			border-color: var(--primary-color);
+		}
 	}
 }
 </style>

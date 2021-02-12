@@ -505,7 +505,6 @@ export default {
 			const tlEyes = gsap.timeline();
 			const tlMouth = gsap.timeline();
 			const dur = {
-				// delay: -0.2,
 				duration: 0.8,
 				ease: 'elastic'
 			};
@@ -517,7 +516,7 @@ export default {
 					y: 20
 				})
 				.to([this.$refs.eyeLeftClosed, this.$refs.eyeRightClosed], {
-					duration: 0.2,
+					duration: 0.1,
 					scaleY: 1,
 					y: 0
 				});
@@ -592,6 +591,13 @@ export default {
 			});
 
 			const hat = gsap.to(this.$refs.hat, {
+				onStart: () => {
+					this.starPosition = {
+						x: -10,
+						y: -85
+					};
+					this.starIsVisible = 6;
+				},
 				startAt: {
 					opacity: 1,
 					scale: 0,
@@ -884,11 +890,6 @@ export default {
 		fill: var(--black);
 	}
 
-	// &-mouth,
-	// &-mouth-open {
-	// 	transform-origin: 72.5px 101.5px !important;
-	// }
-
 	&-blush {
 		stroke: var(--secondary-color);
 	}
@@ -896,14 +897,6 @@ export default {
 	&-blush-small {
 		stroke-width: 2.5px;
 	}
-
-	// &-arm {
-		// transform-origin: 101px 98px !important;
-	// }
-
-	// &-face {
-		// transform-origin: 80px 83px !important;
-	// }
 
 	&-star {
 		stroke-width: 3px;
