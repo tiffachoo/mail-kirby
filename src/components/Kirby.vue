@@ -8,7 +8,7 @@
 			<defs>
 				<path
 					ref="bodySwallow"
-					d="M104.29,88c33.94,0,59.29,17.2,59.29,32.58,0,8.34-1.28,14.4-7.69,18.83-7.63,5.27-22.25,7.83-44.7,7.83-2.19,0-4.49,0-6.84-.07-26.18-.55-42.32-3.11-50.8-8.07-7.15-4.19-8.55-10-8.55-18.52C45,105.2,70.36,88,104.29,88m0-3C69.89,85,42,102.59,42,120.58s6,28.42,62.29,29.59q3.58.08,6.9.07c49.89,0,55.39-12.43,55.39-29.66,0-18-27.89-35.58-62.29-35.58Z"
+					d="M167.58,120.58c0,18-6,30.75-62.29,29.58C49,149,43,138.58,43,120.58S70.89,85,105.29,85 S167.58,102.59,167.58,120.58z"
 				/>
 				<path 
 					id="star"
@@ -83,6 +83,7 @@
 				ref="body"
 			>
 				<circle 
+					id="bodyFill"
 					ref="bodyFill"
 					class="kirby-body" 
 					cx="101.5" 
@@ -90,6 +91,7 @@
 					r="57.5"
 				/>
 				<circle 
+					id="bodyStroke"
 					ref="bodyStroke"
 					class="kirby-stroke" 
 					cx="100.5" 
@@ -267,6 +269,8 @@
 
 <script>
 import { gsap } from 'gsap';
+import MorphSVGPlugin from '@/vendor/gsap-morph-svg-plugin';
+gsap.registerPlugin(MorphSVGPlugin);
 
 export default {
 	name: 'kirby',
@@ -276,6 +280,8 @@ export default {
 	},
 	data() {
 		return {
+			bodyPathFill: null,
+			bodyPathStroke: null,
 			starIsVisible: 0,
 			starPosition: null
 		};
@@ -304,6 +310,9 @@ export default {
 		}
 	},
 	mounted() {
+		this.bodyPathFill = MorphSVGPlugin.convertToPath(this.$refs.bodyFill);
+		this.bodyPathStroke = MorphSVGPlugin.convertToPath(this.$refs.bodyStroke);
+		
 		gsap.set(this.$refs.mouthOpen, {
 			transformOrigin: '17px 26px',
 			scale: 0
@@ -541,10 +550,9 @@ export default {
 				scale: 1
 			});
 
-			const bodyStroke = gsap.to([this.$refs.bodyStroke, this.$refs.bodyFill], {
+			const bodyStroke = gsap.to(['#bodyStroke', '#bodyFill'], {
 				...dur,
-				// morphSVG: this.$refs.bodySwallow,
-				scaleY: 0.57
+				morphSVG: this.$refs.bodySwallow
 			});
 
 			const armLeft = gsap.to(this.$refs.armLeft, {
@@ -690,9 +698,14 @@ export default {
 				y: 0
 			});
 			
-			gsap.to([this.$refs.bodyStroke, this.$refs.bodyFill], {
+			gsap.to('#bodyStroke', {
 				...dur,
-				scaleY: 1
+				morphSVG: this.bodyPathStroke
+			});
+
+			gsap.to('#bodyFill', {
+				...dur,
+				morphSVG: this.bodyPathFill
 			});
 
 			gsap.to(this.$refs.armLeft, {
