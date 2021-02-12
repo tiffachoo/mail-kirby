@@ -58,13 +58,15 @@ export default {
 	methods: {
 		submitMail() {
 			if (this.emailValue) {
-				this.emailText = this.emailValue;
+				const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+				this.isValid = emailRegex.test(this.emailValue);
+				this.isNotValid = !this.isValid;
+
+				this.emailText = this.emailValue.length > 15 ?
+					this.emailValue.slice(0, 15) + '...' :
+					this.emailValue;
 				this.emailValue = '';
 				this.emailIsDisabled = true;
-	
-				const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-				this.isValid = emailRegex.test(this.emailText);
-				this.isNotValid = !this.isValid;
 	
 				this.$nextTick(this.animateText);
 			}
