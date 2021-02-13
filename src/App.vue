@@ -24,6 +24,7 @@
 				v-model="emailValue" 
 				:disabled="emailIsDisabled"
 				:has-error="isNotValid"
+				@click="submitMail"
 				@keydown.enter="submitMail"
 			/>
 		</div>

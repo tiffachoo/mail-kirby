@@ -802,7 +802,7 @@ export default {
 					ease: 'power2.inOut',
 					rotation: 720,
 					scale: 1,
-					x: -300
+					x: -350
 				})
 				.to(this.$refs.star, {
 					duration: 0.2,
