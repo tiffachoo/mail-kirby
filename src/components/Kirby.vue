@@ -812,7 +812,7 @@ export default {
 				.to(this.$refs.star, {
 					onStart: () => {
 						this.starPosition = {
-							x: -300,
+							x: -350,
 							y: -20
 						};
 						this.starIsVisible = 6;
