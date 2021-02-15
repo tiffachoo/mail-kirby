@@ -1,24 +1,22 @@
-# mail-kirby
+# Delivering happiness 💌
 
-## Project setup
+> A delightful animated Kirby email subscription form.
+
+⚡️ [View Codepen](https://codepen.io/tiffachoo/pen/BaQpVeR)
+
+### Starring
+* Vue.js
+* GSAP
+* Sass
+
+---
+
+#### Setup
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+#### Development
 ```
 npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
